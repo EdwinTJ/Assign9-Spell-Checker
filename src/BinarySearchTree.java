@@ -1,93 +1,69 @@
-import javax.naming.PartialResultException;
+import com.sun.source.tree.Tree;
 
 public class BinarySearchTree <E extends Comparable> {
 
-    private ListNode<E> head = new ListNode<>();
-    public int size;
+    private class TreeNode{
+        E value;
+        TreeNode left;
+        TreeNode right;
 
-    public BinarySearchTree() {
-        this.size = 0;
-    }
-
-    public int getSize() {
-        return this.size;
-    }
-
-    public boolean isEmpty() {
-        return this.size == 0;
-    }
-
-    private class ListNode<E> {
-        public E value;
-        public ListNode<E> next;
-
-        public ListNode() {
-        }
-
-        public ListNode(E o) {
-            this.value = o;
+        public TreeNode(E value){
+            this.value = value;
         }
     }
 
-    //Todo: Verificar que la palabra no este duplicada
-    //Todo: Si no esta duplicada return false y verdadero si esta duplicada
-    //Agregar valores
+    private TreeNode root;
+
+
      boolean insert(E value) {
-        ListNode<E> node = new ListNode<>(value);
-        ListNode<E> current = head.next;
-        ListNode<E> previous = head;
 
-        while(current != null && current.value.compareTo(value) <0){
-            previous = current;
-            current = current.next;
-            return true;
-        }
+         if(this.search(value)){
+             return false;
+         };
+       if(this.root == null){
+           this.root = new TreeNode(value);
+           this.root.value = value;
+       }else{
+           if(this.root.value.compareTo(value) < 0){
+               if(this.root.left != null){
+                   this.insert(value);
+               }else{
+                   this.root.left = new TreeNode(value);
+               }
+           }else{
+               if(this.root.right !=null){
+                   this.insert(value);
+               }else{
+                   this.root.right = new TreeNode(value);
+               }
+           }
+       }
+       return true;
+     }
 
-        previous.next = node;
-        node.next = current;
-        this.size++;
-        return false;
-    }
 
-    //TODO: Verificar que cuando el valor sea borrado return true
     boolean remove(E value){
-        ListNode<E> node = head.next;
-        ListNode<E> previous = head;
-        boolean deleted = true;
-
-        while(node.value.compareTo(value) !=0 ){
-            previous = node;
-            node = node.next;
-            deleted = false;
-        }
-        previous.next = node.next;
-        this.size--;
-        return deleted;
+         return false;
     }
 
-    boolean search(E value){
-        ListNode<E> current = head.next;
+    boolean search( E value) {
         boolean found = false;
+        TreeNode node = root;
 
-        while(current != null && !found){
-            if(current.value.compareTo(value) == 0){
+        while (!found && node != null) {
+            if (node.value.compareTo(value) == 0) {
                 found = true;
+            } else if (node.value.compareTo(value) > 0) {
+                node = node.right;
             }else{
-                current = current.next;
+                node = node.left;
             }
         }
         return found;
     }
 
-    //Todo: verificar que la funcion este bien :)
-    //Todo: Modificar funcion que busque en base a los argumentos de la funcion
     void display(String message){
-        ListNode<E> current = head.next;
 
-        while(current != null){
-            System.out.println(current.value);
-            current = current.next;
-        }
     }
 
     int numberNodes(){
@@ -99,6 +75,31 @@ public class BinarySearchTree <E extends Comparable> {
     }
 
     int height(){
-        return 1;
+     return this.findHeight(root);
+    }
+
+    public int findHeight(TreeNode node){
+        //Check whether tree is empty
+        if(node == null) {
+            return 0;
+        }
+        else {
+            int leftHeight = 0, rightHeight = 0;
+
+            //Calculate the height of left subtree
+            if(node.left != null)
+                leftHeight = findHeight(node.left);
+
+            //Calculate the height of right subtree
+            if(node.right != null)
+                rightHeight = findHeight(node.right);
+
+            //Compare height of left subtree and right subtree
+            //and store maximum of two in variable max
+            int max = (leftHeight > rightHeight) ? leftHeight : rightHeight;
+
+            //Calculate the total height of tree by adding height of root
+            return (max + 1);
+        }
     }
 }
