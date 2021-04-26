@@ -1,3 +1,5 @@
+import java.io.File;
+import java.util.Scanner;
 
 public class SpellChecker {
     public static void main(String[] args) {
@@ -76,6 +78,18 @@ public class SpellChecker {
     public static BinarySearchTree<String> readDictionary() {
         BinarySearchTree<String> tree = new BinarySearchTree<>();
 
+        File file = new File("Dictionary.txt");
+
+        try  (Scanner input = new Scanner(file))
+        {
+            while (input.hasNextLine()) {
+                String word = input.nextLine();
+                tree.insert(word);
+            }
+        }
+        catch (java.io.IOException ex) {
+            System.out.println("An error occurred trying to read the file:" + ex);
+        }
 
         return tree;
     }
