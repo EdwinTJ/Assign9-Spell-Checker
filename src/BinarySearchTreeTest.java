@@ -19,6 +19,7 @@ public class BinarySearchTreeTest {
                 2, 6,
                 1, 3, 5, 7
         };
+
         int count = 0;
 
         for (int item : array) {
@@ -255,6 +256,7 @@ public class BinarySearchTreeTest {
     public void BinarySearchTreeHeightTest1() {
         BinarySearchTree<Integer> intBst = new BinarySearchTree<>();
         int [] array = {1, 2, 3, 4, 5, 6, 7, 8};
+        //int [] array = {1,2};
         int height = 0;
 
         for (int item : array) {
